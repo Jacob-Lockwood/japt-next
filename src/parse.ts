@@ -18,6 +18,7 @@ const tokens = {
   Var: createToken({ name: "Var", pattern: /[A-Z]/ }),
   Comma: createToken({ name: "Comma", pattern: /,/, label: "," }),
   Space: createToken({ name: "Space", pattern: / / }),
+  Newline: createToken({ name: "Newline", pattern: /\n/ }),
 };
 
 const lexer = new Lexer(Object.values(tokens));
@@ -30,8 +31,14 @@ class JaptParser extends CstParser {
   // public program = this.RULE("program", () => {
   //   this.SUBRULE(this.expression);
   // });
+  public program = this.RULE("program", () => {
+    this.MANY_SEP({
+      SEP: tokens.Newline,
+      DEF: () => this.SUBRULE(this.expression),
+    });
+  });
   public expression = this.RULE("expression", () => {
-    this.SUBRULE(this.literal);
+    this.OPTION({ DEF: () => this.SUBRULE(this.literal) });
     this.MANY({ DEF: () => this.SUBRULE(this.command) });
   });
   public literal = this.RULE("literal", () => {
@@ -74,7 +81,7 @@ export const productions = parser.getGAstProductions();
 export function parse(source: string) {
   const lexResult = lexer.tokenize(source);
   parser.input = lexResult.tokens;
-  const cst = parser.expression();
+  const cst = parser.program();
   return {
     cst,
     lexErrors: lexResult.errors,
