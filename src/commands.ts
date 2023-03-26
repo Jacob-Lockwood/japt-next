@@ -10,22 +10,37 @@ class F implements Wrapper<(...args: any[]) => any> {
     return this.fn(...args);
   }
 }
-class A implements Wrapper<any[]> {
+class A implements Wrapper<Wrapper<any>[]> {
   constructor(public arr: Wrapper<any>[]) {}
   unwrap() {
     return this.arr.map((x) => x.unwrap());
   }
-  m(fn: F) {
-    return new A(this.arr.map((...a) => fn.call(...a)));
+  /**
+   * @signature `A.m(f (x,n,a) -> x) -> A`
+   * @description Map each element of `A` through `f`
+   */
+  m(f: F) {
+    return new A(this.arr.map((...a) => f.call(...a)));
   }
-  q(str: S) {
-    return this.arr.join(str.unwrap());
+  /**
+   * @signature `A.q(s) -> S`
+   * @description Join `A` by `s`
+   */
+  q(s: S = $S("")) {
+    return $S(this.arr.join(s.unwrap()));
   }
 }
 class S implements Wrapper<string> {
   constructor(public str: string) {}
   unwrap() {
     return this.str;
+  }
+  /**
+   * @signature `S.q(s) -> A`
+   * @description Split `S` by `s`
+   */
+  q(s: S = $S("")) {
+    return $A(this.str.split(s.unwrap()).map($S));
   }
 }
 class N implements Wrapper<number> {

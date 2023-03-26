@@ -15,3 +15,7 @@ Eventually, I will set up a NPM package for this, but for now, you can use this 
     japt run < program.japt # interpret (very few functions have been implemented yet)
     echo 'program' | japt run # you don't have to save the program to a file
     ```
+
+## Contributing
+
+Builtins are defined in `src/commands.ts`. If you write a PR please run `pnpm gen-docs` before submitting, as I haven't gotten the chance to add CI/CD yet.

@@ -1,4 +1,7 @@
 import { createToken, Lexer, CstParser } from "chevrotain";
+import { codepage } from "./codepage";
+
+const commandRegex = new RegExp(codepage.slice(45).split("").join(""));
 
 const tokens = {
   // LCurly: createToken({ name: "LCurly", pattern: /{/, label: "{" }),
@@ -13,7 +16,7 @@ const tokens = {
     name: "NumberLiteral",
     pattern: /-?\d+(\.\d+)?/,
   }),
-  Command: createToken({ name: "Command", pattern: /[a-z]/ }),
+  Command: createToken({ name: "Command", pattern: commandRegex }),
   Params: createToken({ name: "Params", pattern: /[A-Z]*{/ }),
   Var: createToken({ name: "Var", pattern: /[A-Z]/ }),
   Comma: createToken({ name: "Comma", pattern: /,/, label: "," }),
