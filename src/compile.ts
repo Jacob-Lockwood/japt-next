@@ -27,30 +27,26 @@ function cstNodeToJS(node: CstNode): string {
     const args = (children.expression as CstNode[]).map(cstNodeToJS);
     return `.${commandName}(${args.join(", ")})`;
   }
-  if (name === "literal") {
-    if ("StringLiteral" in children) {
-      return `$S(${(children.StringLiteral[0] as IToken).image})`;
-    }
-    if ("NumberLiteral" in children) {
-      return `$N(${(children.NumberLiteral[0] as IToken).image})`;
-    }
-    if ("array" in children) {
-      const arr = (children.array[0] as CstNode).children
-        .expression as CstNode[];
-      return `$A([${arr.map(cstNodeToJS).join(", ")}])`;
-    }
-    if ("fn" in children) {
-      const fn = children.fn[0] as CstNode;
-      // not done yet
-      const params = (fn.children.Params[0] as IToken).image
-        .split("")
-        .slice(0, -1);
-      const body = cstNodeToJS(fn.children.expression[0] as CstNode);
-      return `$F((${params.join(", ")}) => ${body})`;
-    }
-    if ("Var" in children) {
-      return (children.Var[0] as IToken).image;
-    }
+  if ("StringLiteral" in children) {
+    return `$S(${(children.StringLiteral[0] as IToken).image})`;
+  }
+  if ("NumberLiteral" in children) {
+    return `$N(${(children.NumberLiteral[0] as IToken).image})`;
+  }
+  if ("array" in children) {
+    const arr = (children.array[0] as CstNode).children.expression as CstNode[];
+    return `$A([${arr.map(cstNodeToJS).join(", ")}])`;
+  }
+  if ("fn" in children) {
+    const fn = children.fn[0] as CstNode;
+    const params = (fn.children.Params[0] as IToken).image
+      .split("")
+      .slice(0, -1);
+    const body = cstNodeToJS(fn.children.expression[0] as CstNode);
+    return `$F((${params.join(", ")}) => ${body})`;
+  }
+  if ("Var" in children) {
+    return (children.Var[0] as IToken).image;
   }
   return "";
 }

@@ -1,7 +1,7 @@
 export interface Wrapper<T> {
   unwrap(): T;
 }
-class F implements Wrapper<(...args: any[]) => any> {
+export class F implements Wrapper<(...args: any[]) => any> {
   constructor(public fn: (...args: any[]) => any) {}
   unwrap() {
     return this.fn;
@@ -10,7 +10,7 @@ class F implements Wrapper<(...args: any[]) => any> {
     return this.fn(...args);
   }
 }
-class A implements Wrapper<Wrapper<any>[]> {
+export class A implements Wrapper<Wrapper<any>[]> {
   constructor(public arr: Wrapper<any>[]) {}
   unwrap() {
     return this.arr.map((x) => x.unwrap());
@@ -30,7 +30,7 @@ class A implements Wrapper<Wrapper<any>[]> {
     return $S(this.arr.join(s.unwrap()));
   }
 }
-class S implements Wrapper<string> {
+export class S implements Wrapper<string> {
   constructor(public str: string) {}
   unwrap() {
     return this.str;
@@ -43,7 +43,7 @@ class S implements Wrapper<string> {
     return $A(this.str.split(s.unwrap()).map($S));
   }
 }
-class N implements Wrapper<number> {
+export class N implements Wrapper<number> {
   constructor(public num: number) {}
   unwrap() {
     return this.num;

@@ -18,4 +18,6 @@ Eventually, I will set up a NPM package for this, but for now, you can use this 
 
 ## Contributing
 
+Run `pnpm build` to compile the TypeScript to JS.
+
 Builtins are defined in `src/commands.ts`. If you write a PR please run `pnpm gen-docs` before submitting, as I haven't gotten the chance to add CI/CD yet.
